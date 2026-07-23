@@ -100,7 +100,7 @@
         </span>
       </div>
       <h1 class="text-xl sm:text-2xl font-bold text-white mb-1">
-        에겐남들 모임 🍻
+        Brothers Club 🍻
       </h1>
       <p class="text-sm text-slate-400 mb-6">우리가 모인 금액 (카카오뱅크)</p>
       
@@ -111,7 +111,7 @@
         <span class="text-xl text-yellow-500 font-bold">원</span>
       </div>
       <div class="mt-4 flex justify-center gap-4 text-xs text-slate-300">
-        <div class="flex items-center gap-1"><i class="fa-solid fa-users text-indigo-400"></i> 총 7명</div>
+        <div class="flex items-center gap-1"><i class="fa-solid fa-users text-indigo-400"></i> 총 8명</div>
         <div class="flex items-center gap-1"><i class="fa-solid fa-money-bill-wave text-green-400"></i> 월 2만원</div>
       </div>
     </header>
@@ -126,7 +126,7 @@
           <p class="text-xs text-slate-400 mt-1" id="current-month-text">2026년 7월 기준</p>
         </div>
         <div class="text-xs font-medium text-slate-300 bg-white/5 px-2 py-1 rounded-lg border border-white/10">
-          완료 <span id="paid-count" class="text-green-400 font-bold">0</span>/7
+          완료 <span id="paid-count" class="text-green-400 font-bold">0</span>/8
         </div>
       </div>
 
@@ -150,71 +150,20 @@
 
     <!-- 계절별 정기 모임 계획 -->
     <section class="glass-panel rounded-3xl p-5 sm:p-6 z-10">
-      <h2 class="text-lg font-bold text-white flex items-center gap-2 mb-5">
-        <i class="fa-solid fa-map-location-dot text-indigo-400"></i> 연간 정기 모임 계획
-      </h2>
+      <div class="flex justify-between items-center mb-5">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-map-location-dot text-indigo-400"></i> 연간 정기 모임 계획
+        </h2>
+        <!-- 🔥 이 버튼을 클릭하면 파이어베이스에 기본 데이터가 쫙 깔립니다 -->
+        <button onclick="window.setupInitialData()" class="text-[10px] bg-red-500/20 text-red-300 hover:bg-red-500/40 border border-red-500/30 px-2 py-1 rounded transition-colors cursor-pointer z-20 shadow-lg">
+          <i class="fa-solid fa-database"></i> DB 초기세팅(클릭)
+        </button>
+      </div>
 
-      <div class="space-y-3">
-        <!-- 봄 -->
-        <div class="glass-card rounded-2xl p-4 flex gap-4 items-center">
-          <div class="w-12 h-12 rounded-xl bg-pink-500/20 flex justify-center items-center flex-shrink-0 border border-pink-500/30">
-            <i class="fa-solid fa-seedling text-pink-400 text-xl"></i>
-          </div>
-          <div class="flex-grow">
-            <div class="flex justify-between items-start">
-              <h3 class="font-bold text-white text-sm sm:text-base">봄 (3~5월)</h3>
-              <span class="text-[10px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded border border-white/5">종료</span>
-            </div>
-            <p class="text-xs text-slate-400 mt-1"><i class="fa-regular fa-clock mr-1"></i> 4월 둘째 주 토요일 18:00</p>
-            <p class="text-xs text-slate-300 mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i> 마장동 축산물시장 한우파티</p>
-          </div>
-        </div>
-
-        <!-- 여름 -->
-        <div class="glass-card rounded-2xl p-4 flex gap-4 items-center relative overflow-hidden border-indigo-500/30 bg-indigo-500/10">
-          <div class="absolute right-0 top-0 w-16 h-16 bg-blue-400/20 rounded-bl-full blur-md"></div>
-          <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex justify-center items-center flex-shrink-0 border border-blue-500/30 relative z-10">
-            <i class="fa-solid fa-water text-blue-400 text-xl"></i>
-          </div>
-          <div class="flex-grow relative z-10">
-            <div class="flex justify-between items-start">
-              <h3 class="font-bold text-white text-sm sm:text-base">여름 (6~8월)</h3>
-              <span class="text-[10px] bg-indigo-500 text-white px-2 py-0.5 rounded shadow-lg shadow-indigo-500/30 animate-pulse">진행중</span>
-            </div>
-            <p class="text-xs text-blue-200/80 mt-1"><i class="fa-regular fa-clock mr-1"></i> 7월 23일(토) 14:00 (1박2일)</p>
-            <p class="text-xs text-blue-100 mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i> 가평 빠지 & 프라이빗 독채 펜션</p>
-          </div>
-        </div>
-
-        <!-- 가을 -->
-        <div class="glass-card rounded-2xl p-4 flex gap-4 items-center">
-          <div class="w-12 h-12 rounded-xl bg-orange-500/20 flex justify-center items-center flex-shrink-0 border border-orange-500/30">
-            <i class="fa-solid fa-leaf text-orange-400 text-xl"></i>
-          </div>
-          <div class="flex-grow">
-            <div class="flex justify-between items-start">
-              <h3 class="font-bold text-white text-sm sm:text-base">가을 (9~11월)</h3>
-              <span class="text-[10px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded border border-white/5">예정</span>
-            </div>
-            <p class="text-xs text-slate-400 mt-1"><i class="fa-regular fa-clock mr-1"></i> 10월 중순 (일정 조율중)</p>
-            <p class="text-xs text-slate-300 mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i> 노을캠핑장 글램핑 & 바베큐</p>
-          </div>
-        </div>
-
-        <!-- 겨울 -->
-        <div class="glass-card rounded-2xl p-4 flex gap-4 items-center">
-          <div class="w-12 h-12 rounded-xl bg-slate-200/20 flex justify-center items-center flex-shrink-0 border border-slate-200/30">
-            <i class="fa-regular fa-snowflake text-slate-200 text-xl"></i>
-          </div>
-          <div class="flex-grow">
-            <div class="flex justify-between items-start">
-              <h3 class="font-bold text-white text-sm sm:text-base">겨울 (12~2월)</h3>
-              <span class="text-[10px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded border border-white/5">예정</span>
-            </div>
-            <p class="text-xs text-slate-400 mt-1"><i class="fa-regular fa-clock mr-1"></i> 12월 마지막 주 연말 송년회</p>
-            <p class="text-xs text-slate-300 mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i> 노량진 수산시장 대방어</p>
-          </div>
-        </div>
+      <div id="schedules-container" class="space-y-3">
+        <!-- JS로 실시간 렌더링됨 -->
+        <div class="glass-card rounded-2xl p-4 h-24 animate-pulse bg-slate-700/20 border-white/5"></div>
+        <div class="glass-card rounded-2xl p-4 h-24 animate-pulse bg-slate-700/20 border-white/5"></div>
       </div>
     </section>
     
@@ -225,29 +174,9 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    /*
-      ===============================================================
-      [Firebase DB 구조 세팅 안내]
-      사용자가 파이어베이스 콘솔(Firestore Database)에 직접 입력하셔야 할 구조입니다.
-
-      1. 총 금액 정보
-      - 컬렉션 이름: account_info
-      - 문서 ID: current
-      - 필드: totalAmount (number 타입, 예: 1540000)
-
-      2. 멤버 입금 현황 정보
-      - 컬렉션 이름: members
-      - 문서: 각 멤버별로 문서 생성 (문서 ID는 자동생성 또는 이름으로)
-      - 필드: 
-          name (string 타입, 예: "김철수")
-          isPaid (boolean 타입, 예: true 또는 false)
-          photoUrl (string 타입, 프로필 이미지 URL. 빈칸이면 기본 아바타 사용)
-      ===============================================================
-    */
-
-    // 요청하신 파이어베이스 설정 정보
+    // 파이어베이스 설정 정보
     const firebaseConfig = {
       apiKey: "AIzaSyBnjCWfcbvrvadmQ3bjoRJTD-rXSKzp_Bo",
       authDomain: "git-io-33713.firebaseapp.com",
@@ -258,23 +187,68 @@
       measurementId: "G-58XJP9R6HB"
     };
 
-    // UI에 그릴 샘플 멤버 데이터 (DB 연결 전/실패 시 보여줄 데이터)
+    // UI에 그릴 8명 샘플 멤버 데이터
     const mockMembers = [
-      { id: '1', name: '김회장', isPaid: true, photoUrl: 'https://i.pravatar.cc/150?u=1' },
-      { id: '2', name: '이총무', isPaid: true, photoUrl: 'https://i.pravatar.cc/150?u=2' },
-      { id: '3', name: '박행동', isPaid: true, photoUrl: 'https://i.pravatar.cc/150?u=3' },
-      { id: '4', name: '최기획', isPaid: false, photoUrl: 'https://i.pravatar.cc/150?u=4' },
-      { id: '5', name: '정연락', isPaid: true, photoUrl: 'https://i.pravatar.cc/150?u=5' },
-      { id: '6', name: '강운전', isPaid: false, photoUrl: 'https://i.pravatar.cc/150?u=6' },
-      { id: '7', name: '조막내', isPaid: true, photoUrl: 'https://i.pravatar.cc/150?u=7' },
+      { id: '1', name: '박성현', isPaid: false, photoUrl: '' },
+      { id: '2', name: '김관모', isPaid: false, photoUrl: '' },
+      { id: '3', name: '김현식', isPaid: false, photoUrl: '' },
+      { id: '4', name: '엄찬솔', isPaid: false, photoUrl: '' },
+      { id: '5', name: '이지원', isPaid: false, photoUrl: '' },
+      { id: '6', name: '지원복', isPaid: false, photoUrl: '' },
+      { id: '7', name: '지호진', isPaid: false, photoUrl: '' },
+      { id: '8', name: '최진우', isPaid: false, photoUrl: '' },
     ];
-    let currentTotalAmount = 1400000;
+    
+    // UI에 그릴 계절별 일정 초기 세팅값 (미정)
+    const mockSchedules = [
+      { id: "spring", season: "봄 (3~5월)", order: 1, title: "주제 미정", date: "일정 미정", location: "장소 미정", link: "", status: "예정", icon: "fa-seedling", color: "pink" },
+      { id: "summer", season: "여름 (6~8월)", order: 2, title: "주제 미정", date: "일정 미정", location: "장소 미정", link: "", status: "예정", icon: "fa-water", color: "blue" },
+      { id: "fall", season: "가을 (9~11월)", order: 3, title: "주제 미정", date: "일정 미정", location: "장소 미정", link: "", status: "예정", icon: "fa-leaf", color: "orange" },
+      { id: "winter", season: "겨울 (12~2월)", order: 4, title: "주제 미정", date: "일정 미정", location: "장소 미정", link: "", status: "예정", icon: "fa-snowflake", color: "slate" }
+    ];
+
+    let currentTotalAmount = 0;
+    let app, db;
+
+    try {
+      app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+    } catch (e) {
+      console.error("Firebase 초기화 에러:", e);
+    }
+
+    // ==========================================
+    // [마법의 버튼 기능] 파이어베이스에 데이터 밀어넣기
+    // ==========================================
+    window.setupInitialData = async function() {
+      if(!db) {
+        alert("DB 연결이 되지 않았습니다.");
+        return;
+      }
+      if(!confirm("Firebase에 8명 멤버와 4계절 미정 일정을 기본값으로 생성합니다.\n(기존 데이터가 있다면 덮어씌워집니다) 진행하시겠습니까?")) return;
+
+      try {
+        // 1. 멤버 8명 세팅
+        for (const m of mockMembers) {
+          await setDoc(doc(db, "members", m.name), { name: m.name, isPaid: false, photoUrl: "" });
+        }
+        // 2. 모임 금액 0원으로 세팅
+        await setDoc(doc(db, "account_info", "current"), { totalAmount: 0 });
+        // 3. 4계절 미정 일정 세팅
+        for (const s of mockSchedules) {
+          await setDoc(doc(db, "schedules", s.id), s);
+        }
+        alert("✅ 파이어베이스에 초기 데이터가 완벽하게 세팅되었습니다!\n이제 파이어베이스 콘솔에서 내용과 링크를 수정해보세요.");
+      } catch(e) {
+        console.error(e);
+        alert("❌ 세팅 중 오류가 발생했습니다. 파이어베이스 규칙 설정을 확인해주세요.");
+      }
+    };
 
     // 초기 화면 세팅 (현재 월 표시)
     const today = new Date();
     document.getElementById('current-month-text').innerText = `${today.getFullYear()}년 ${today.getMonth() + 1}월 기준`;
 
-    // 숫자에 콤마 찍어주는 함수
     function formatNumber(num) {
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
@@ -282,27 +256,20 @@
     // 멤버 렌더링 함수
     function renderMembers(membersData) {
       const grid = document.getElementById('members-grid');
-      grid.innerHTML = ''; // 기존(스켈레톤 또는 이전 데이터) 비우기
+      grid.innerHTML = ''; 
       
       let paidCount = 0;
 
       membersData.forEach(member => {
         if(member.isPaid) paidCount++;
-
-        // 이미지 없을 경우 기본 아바타
         const imgSrc = member.photoUrl && member.photoUrl.trim() !== '' 
             ? member.photoUrl 
             : `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random&color=fff`;
 
-        // 입금 여부에 따른 스타일 분기
-        const statusClass = member.isPaid 
-            ? 'border-green-500 status-pulse-green' 
-            : 'border-red-500/50 opacity-60 grayscale';
-            
+        const statusClass = member.isPaid ? 'border-green-500 status-pulse-green' : 'border-red-500/50 opacity-60 grayscale';
         const badgeHTML = member.isPaid
             ? `<div class="absolute -bottom-1 -right-1 bg-green-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-[#1e293b] z-10"><i class="fa-solid fa-check"></i></div>`
             : `<div class="absolute -bottom-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-[#1e293b] z-10"><i class="fa-solid fa-xmark"></i></div>`;
-
         const nameClass = member.isPaid ? 'text-white' : 'text-slate-400 line-through decoration-red-500/50';
 
         const card = document.createElement('div');
@@ -316,55 +283,86 @@
         `;
         grid.appendChild(card);
       });
-
-      // 입금 완료자 수 업데이트
       document.getElementById('paid-count').innerText = paidCount;
     }
 
-    // 초기 샘플 데이터로 화면 그리기 (Firebase 연동 딜레이 동안 보여짐)
+    // 일정 렌더링 함수 (링크가 있으면 클릭 가능하게 처리)
+    function renderSchedules(schedulesData) {
+      const container = document.getElementById('schedules-container');
+      container.innerHTML = '';
+
+      schedulesData.sort((a, b) => a.order - b.order);
+
+      schedulesData.forEach(s => {
+        let bgClass, iconClass, badgeClass;
+        if(s.color === 'pink') { bgClass = 'bg-pink-500/20 border-pink-500/30'; iconClass = 'text-pink-400'; badgeClass = 'bg-slate-700/50 text-slate-300 border-white/5'; }
+        else if(s.color === 'blue') { bgClass = 'bg-blue-500/20 border-blue-500/30'; iconClass = 'text-blue-400'; badgeClass = 'bg-slate-700/50 text-slate-300 border-white/5'; }
+        else if(s.color === 'orange') { bgClass = 'bg-orange-500/20 border-orange-500/30'; iconClass = 'text-orange-400'; badgeClass = 'bg-slate-700/50 text-slate-300 border-white/5'; }
+        else { bgClass = 'bg-slate-200/20 border-slate-200/30'; iconClass = 'text-slate-200'; badgeClass = 'bg-slate-700/50 text-slate-300 border-white/5'; }
+
+        if(s.status === '진행중') badgeClass = 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 animate-pulse';
+        if(s.status === '종료') badgeClass = 'bg-slate-800 text-slate-500 border-white/5';
+
+        // 링크가 있으면 a 태그로 감싸서 클릭 가능하게 만듦
+        const locationHtml = s.link && s.link.trim() !== '' 
+            ? `<a href="${s.link}" target="_blank" class="text-indigo-300 hover:text-indigo-200 underline decoration-indigo-400/50 underline-offset-2"><i class="fa-solid fa-location-dot mr-1"></i> ${s.location}</a>`
+            : `<i class="fa-solid fa-location-dot mr-1"></i> ${s.location}`;
+
+        const card = document.createElement('div');
+        card.className = 'glass-card rounded-2xl p-4 flex gap-4 items-center relative overflow-hidden';
+        if(s.status === '진행중') card.classList.add('border-indigo-500/30', 'bg-indigo-500/10');
+
+        card.innerHTML = `
+          <div class="w-12 h-12 rounded-xl flex justify-center items-center flex-shrink-0 border relative z-10 ${bgClass}">
+            <i class="fa-solid ${s.icon} ${iconClass} text-xl"></i>
+          </div>
+          <div class="flex-grow relative z-10">
+            <div class="flex justify-between items-start">
+              <h3 class="font-bold text-white text-sm sm:text-base">${s.season}</h3>
+              <span class="text-[10px] px-2 py-0.5 rounded border ${badgeClass}">${s.status}</span>
+            </div>
+            <p class="text-sm text-white font-bold mt-1">${s.title}</p>
+            <p class="text-xs text-slate-400 mt-1"><i class="fa-regular fa-clock mr-1"></i> ${s.date}</p>
+            <p class="text-xs text-slate-300 mt-0.5">${locationHtml}</p>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // 샘플 데이터로 일단 화면 채우기
     renderMembers(mockMembers);
+    renderSchedules(mockSchedules);
     document.getElementById('total-amount').innerText = formatNumber(currentTotalAmount);
 
-    // 파이어베이스 초기화 및 데이터 리스닝
-    try {
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
-
-      // 1. 총 모임 금액 리스너 (account_info 컬렉션 -> current 문서)
-      const accountRef = doc(db, 'account_info', 'current');
-      onSnapshot(accountRef, (docSnap) => {
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          if (data.totalAmount !== undefined) {
-            document.getElementById('total-amount').innerText = formatNumber(data.totalAmount);
-          }
-        } else {
-          console.log("Firebase: 'account_info/current' 문서가 없습니다. 샘플 데이터를 유지합니다.");
+    // 파이어베이스 리스너 (실시간 연동)
+    if(db) {
+      // 1. 모임 금액 가져오기
+      onSnapshot(doc(db, 'account_info', 'current'), (docSnap) => {
+        if (docSnap.exists() && docSnap.data().totalAmount !== undefined) {
+          document.getElementById('total-amount').innerText = formatNumber(docSnap.data().totalAmount);
         }
-      }, (error) => {
-        console.error("Firebase Amount 로드 에러:", error);
-      });
+      }, console.error);
 
-      // 2. 멤버 리스트 리스너 (members 컬렉션)
-      const membersRef = collection(db, 'members');
-      onSnapshot(membersRef, (snapshot) => {
+      // 2. 멤버 리스트 가져오기
+      onSnapshot(collection(db, 'members'), (snapshot) => {
         if (!snapshot.empty) {
           const fetchedMembers = [];
-          snapshot.forEach(doc => {
-            fetchedMembers.push({ id: doc.id, ...doc.data() });
-          });
-          // DB에 데이터가 하나라도 있으면 그걸로 화면 갱신
+          snapshot.forEach(doc => fetchedMembers.push({ id: doc.id, ...doc.data() }));
+          // 가나다 이름순 정렬
+          fetchedMembers.sort((a,b) => a.name.localeCompare(b.name));
           renderMembers(fetchedMembers);
-        } else {
-          console.log("Firebase: 'members' 컬렉션에 데이터가 없습니다. 샘플 데이터를 유지합니다.");
         }
-      }, (error) => {
-        console.error("Firebase Members 로드 에러:", error);
-      });
+      }, console.error);
 
-    } catch (e) {
-      console.error("Firebase 초기화 에러 (설정값을 확인하세요):", e);
-      // 에러가 나도 화면이 깨지지 않고 샘플 데이터로 유지되도록 처리됨.
+      // 3. 계절 일정 리스트 가져오기
+      onSnapshot(collection(db, 'schedules'), (snapshot) => {
+        if (!snapshot.empty) {
+          const fetchedSchedules = [];
+          snapshot.forEach(doc => fetchedSchedules.push({ id: doc.id, ...doc.data() }));
+          renderSchedules(fetchedSchedules);
+        }
+      }, console.error);
     }
   </script>
 </body>
