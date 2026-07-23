@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Brothers Club - 계모임 대시보드</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      margin: 0;
+      padding: 0;
+      /* 고급스러운 다크 그라데이션 배경 */
+      background: linear-gradient(135deg, #0f172a, #1e293b, #0f172a);
+      background-size: 200% 200%;
+      animation: gradientBG 15s ease infinite;
+      color: #f8fafc;
+      min-height: 100vh;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .font-poppins {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* 커스텀 스크롤바 */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+
+    /* 다크 테마 글래스모피즘 */
+    .glass-panel {
+      background: rgba(30, 41, 59, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .glass-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-2px);
+    }
+
+    /* 납부 상태 애니메이션 펄스 */
+    .status-pulse-green {
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+      animation: pulseGreen 2s infinite;
+    }
+    @keyframes pulseGreen {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+
+    .status-pulse-red {
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+      animation: pulseRed 2s infinite;
+    }
+    @keyframes pulseRed {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+  </style>
+</head>
+<body class="flex justify-center items-start pt-6 pb-12 px-4 sm:px-6">
+
+  <div class="w-full max-w-lg relative flex flex-col gap-6">
+    
+    <!-- 배경 장식용 빛번짐 효과 -->
+    <div class="fixed top-[-10%] left-[-10%] w-64 h-64 bg-indigo-500/20 rounded-full blur-[100px] pointer-events-none"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-80 h-80 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+    <!-- 헤더 / 총 모임 금액 -->
+    <header class="glass-panel rounded-3xl p-6 text-center relative overflow-hidden z-10">
+      <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-200/10 to-transparent rounded-bl-full"></div>
+      
+      <div class="flex justify-center mb-3">
+        <span class="bg-white/10 text-xs font-bold px-3 py-1 rounded-full text-white/80 tracking-wider">
+          <i class="fa-solid fa-calendar-check mr-1"></i> 매월 23일 입금일
+        </span>
+      </div>
+      <h1 class="text-xl sm:text-2xl font-bold text-white mb-1">
+        에겐남들 모임 🍻
+      </h1>
+      <p class="text-sm text-slate-400 mb-6">우리가 모인 금액 (카카오뱅크)</p>
+      
+      <div class="flex justify-center items-baseline gap-1">
+        <span class="font-poppins text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-500" id="total-amount">
+          0
+        </span>
+        <span class="text-xl text-yellow-500 font-bold">원</span>
+      </div>
+      <div class="mt-4 flex justify-center gap-4 text-xs text-slate-300">
+        <div class="flex items-center gap-1"><i class="fa-solid fa-users text-indigo-400"></i> 총 7명</div>
+        <div class="flex items-center gap-1"><i class="fa-solid fa-money-bill-wave text-green-400"></i> 월 2만원</div>
+      </div>
+    </header>
+
+    <!-- 이번달 입금 현황 -->
+    <section class="glass-panel rounded-3xl p-5 sm:p-6 z-10">
+      <div class="flex justify-between items-end mb-5">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-green-400"></i> 이번달 입금 현황
+          </h2>
+          <p class="text-xs text-slate-400 mt-1" id="current-month-text">2026년 7월 기준</p>
+        </div>
+        <div class="text-xs font-medium text-slate-300 bg-white/5 px-2 py-1 rounded-lg border border-white/10">
+          완료 <span id="paid-count" class="text-green-400 font-bold">0</span>/7
+        </div>
+      </div>
+
+      <!-- 멤버 리스트 그리드 (기본 샘플 데이터, JS로 덮어씌워짐) -->
+      <div id="members-grid" class="grid grid-cols-3 sm:grid-cols-4 gap-3 sm:gap-4">
+        <!-- 멤버 카드 샘플 -->
+        <div class="flex flex-col items-center gap-2">
+          <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-700 animate-pulse"></div>
+          <div class="h-3 w-10 bg-slate-700 rounded animate-pulse"></div>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-700 animate-pulse"></div>
+          <div class="h-3 w-10 bg-slate-700 rounded animate-pulse"></div>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-700 animate-pulse"></div>
+          <div class="h-3 w-10 bg-slate-700 rounded animate-pulse"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 계절별 정기 모임 계획 -->
+    <section class="glass-panel rounded-3xl p-5 sm:p-6 z-10">
+      <h2 class="text-lg font-bold text-white flex items-center gap-2 mb-5">
+        <i class="fa-solid fa-map-location-dot text-indigo-400"></i> 연간 정기 모임 계획
+      </h2>
+
+      <div class="space-y-3">
+        <!-- 봄 -->
+        <div class="glass-card rounded-2xl p-4 flex gap-4 items-center">
+          <div class="w-12 h-12 rounded-xl bg-pink-500/20 flex justify-center items-center flex-shrink-0 border border-pink-500/30">
+            <i class="fa-solid fa-seedling text-pink-400 text-xl"></i>
+          </div>
+          <div class="flex-grow">
+            <div class="flex justify-between items-start">
+              <h3 class="font-bold text-white text-sm sm:text-base">봄 (3~5월)</h3>
+              <span class="text-[10px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded border border-white/5">종료</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1"><i class="fa-regular fa-clock mr-1"></i> 4월 둘째 주 토요일 18:00</p>
+            <p class="text-xs text-slate-300 mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i> 마장동 축산물시장 한우파티</p>
+          </div>
+        </div>
+
+        <!-- 여름 -->
+        <div class="glass-card rounded-2xl p-4 flex gap-4 items-center relative overflow-hidden border-indigo-500/30 bg-indigo-500/10">
+          <div class="absolute right-0 top-0 w-16 h-16 bg-blue-400/20 rounded-bl-full blur-md"></div>
+          <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex justify-center items-center flex-shrink-0 border border-blue-500/30 relative z-10">
+            <i class="fa-solid fa-water text-blue-400 text-xl"></i>
+          </div>
+          <div class="flex-grow relative z-10">
+            <div class="flex justify-between items-start">
+              <h3 class="font-bold text-white text-sm sm:text-base">여름 (6~8월)</h3>
+              <span class="text-[10px] bg-indigo-500 text-white px-2 py-0.5 rounded shadow-lg shadow-indigo-500/30 animate-pulse">진행중</span>
+            </div>
+            <p class="text-xs text-blue-200/80 mt-1"><i class="fa-regular fa-clock mr-1"></i> 7월 23일(토) 14:00 (1박2일)</p>
+            <p class="text-xs text-blue-100 mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i> 가평 빠지 & 프라이빗 독채 펜션</p>
+          </div>
+        </div>
+
+        <!-- 가을 -->
+        <div class="glass-card rounded-2xl p-4 flex gap-4 items-center">
+          <div class="w-12 h-12 rounded-xl bg-orange-500/20 flex justify-center items-center flex-shrink-0 border border-orange-500/30">
+            <i class="fa-solid fa-leaf text-orange-400 text-xl"></i>
+          </div>
+          <div class="flex-grow">
+            <div class="flex justify-between items-start">
+              <h3 class="font-bold text-white text-sm sm:text-base">가을 (9~11월)</h3>
+              <span class="text-[10px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded border border-white/5">예정</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1"><i class="fa-regular fa-clock mr-1"></i> 10월 중순 (일정 조율중)</p>
+            <p class="text-xs text-slate-300 mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i> 노을캠핑장 글램핑 & 바베큐</p>
+          </div>
+        </div>
+
+        <!-- 겨울 -->
+        <div class="glass-card rounded-2xl p-4 flex gap-4 items-center">
+          <div class="w-12 h-12 rounded-xl bg-slate-200/20 flex justify-center items-center flex-shrink-0 border border-slate-200/30">
+            <i class="fa-regular fa-snowflake text-slate-200 text-xl"></i>
+          </div>
+          <div class="flex-grow">
+            <div class="flex justify-between items-start">
+              <h3 class="font-bold text-white text-sm sm:text-base">겨울 (12~2월)</h3>
+              <span class="text-[10px] bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded border border-white/5">예정</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1"><i class="fa-regular fa-clock mr-1"></i> 12월 마지막 주 연말 송년회</p>
+            <p class="text-xs text-slate-300 mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i> 노량진 수산시장 대방어</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <footer class="text-center py-4 text-xs text-slate-500 pb-10">
+      &copy; 2026 Brothers Club. All rights reserved.
+    </footer>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    /*
+      ===============================================================
+      [Firebase DB 구조 세팅 안내]
+      사용자가 파이어베이스 콘솔(Firestore Database)에 직접 입력하셔야 할 구조입니다.
+
+      1. 총 금액 정보
+      - 컬렉션 이름: account_info
+      - 문서 ID: current
+      - 필드: totalAmount (number 타입, 예: 1540000)
+
+      2. 멤버 입금 현황 정보
+      - 컬렉션 이름: members
+      - 문서: 각 멤버별로 문서 생성 (문서 ID는 자동생성 또는 이름으로)
+      - 필드: 
+          name (string 타입, 예: "김철수")
+          isPaid (boolean 타입, 예: true 또는 false)
+          photoUrl (string 타입, 프로필 이미지 URL. 빈칸이면 기본 아바타 사용)
+      ===============================================================
+    */
+
+    // 요청하신 파이어베이스 설정 정보
+    const firebaseConfig = {
+      apiKey: "AIzaSyBnjCWfcbvrvadmQ3bjoRJTD-rXSKzp_Bo",
+      authDomain: "git-io-33713.firebaseapp.com",
+      projectId: "git-io-33713",
+      storageBucket: "git-io-33713.firebasestorage.app",
+      messagingSenderId: "488733080531",
+      appId: "1:488733080531:web:2a95f7c25856b078ce8d26",
+      measurementId: "G-58XJP9R6HB"
+    };
+
+    // UI에 그릴 샘플 멤버 데이터 (DB 연결 전/실패 시 보여줄 데이터)
+    const mockMembers = [
+      { id: '1', name: '김회장', isPaid: true, photoUrl: 'https://i.pravatar.cc/150?u=1' },
+      { id: '2', name: '이총무', isPaid: true, photoUrl: 'https://i.pravatar.cc/150?u=2' },
+      { id: '3', name: '박행동', isPaid: true, photoUrl: 'https://i.pravatar.cc/150?u=3' },
+      { id: '4', name: '최기획', isPaid: false, photoUrl: 'https://i.pravatar.cc/150?u=4' },
+      { id: '5', name: '정연락', isPaid: true, photoUrl: 'https://i.pravatar.cc/150?u=5' },
+      { id: '6', name: '강운전', isPaid: false, photoUrl: 'https://i.pravatar.cc/150?u=6' },
+      { id: '7', name: '조막내', isPaid: true, photoUrl: 'https://i.pravatar.cc/150?u=7' },
+    ];
+    let currentTotalAmount = 1400000;
+
+    // 초기 화면 세팅 (현재 월 표시)
+    const today = new Date();
+    document.getElementById('current-month-text').innerText = `${today.getFullYear()}년 ${today.getMonth() + 1}월 기준`;
+
+    // 숫자에 콤마 찍어주는 함수
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // 멤버 렌더링 함수
+    function renderMembers(membersData) {
+      const grid = document.getElementById('members-grid');
+      grid.innerHTML = ''; // 기존(스켈레톤 또는 이전 데이터) 비우기
+      
+      let paidCount = 0;
+
+      membersData.forEach(member => {
+        if(member.isPaid) paidCount++;
+
+        // 이미지 없을 경우 기본 아바타
+        const imgSrc = member.photoUrl && member.photoUrl.trim() !== '' 
+            ? member.photoUrl 
+            : `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random&color=fff`;
+
+        // 입금 여부에 따른 스타일 분기
+        const statusClass = member.isPaid 
+            ? 'border-green-500 status-pulse-green' 
+            : 'border-red-500/50 opacity-60 grayscale';
+            
+        const badgeHTML = member.isPaid
+            ? `<div class="absolute -bottom-1 -right-1 bg-green-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-[#1e293b] z-10"><i class="fa-solid fa-check"></i></div>`
+            : `<div class="absolute -bottom-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-[#1e293b] z-10"><i class="fa-solid fa-xmark"></i></div>`;
+
+        const nameClass = member.isPaid ? 'text-white' : 'text-slate-400 line-through decoration-red-500/50';
+
+        const card = document.createElement('div');
+        card.className = 'flex flex-col items-center gap-2 group';
+        card.innerHTML = `
+          <div class="relative">
+            <img src="${imgSrc}" alt="${member.name}" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 ${statusClass} transition-transform group-hover:scale-105">
+            ${badgeHTML}
+          </div>
+          <span class="text-xs sm:text-sm font-bold ${nameClass}">${member.name}</span>
+        `;
+        grid.appendChild(card);
+      });
+
+      // 입금 완료자 수 업데이트
+      document.getElementById('paid-count').innerText = paidCount;
+    }
+
+    // 초기 샘플 데이터로 화면 그리기 (Firebase 연동 딜레이 동안 보여짐)
+    renderMembers(mockMembers);
+    document.getElementById('total-amount').innerText = formatNumber(currentTotalAmount);
+
+    // 파이어베이스 초기화 및 데이터 리스닝
+    try {
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      // 1. 총 모임 금액 리스너 (account_info 컬렉션 -> current 문서)
+      const accountRef = doc(db, 'account_info', 'current');
+      onSnapshot(accountRef, (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.totalAmount !== undefined) {
+            document.getElementById('total-amount').innerText = formatNumber(data.totalAmount);
+          }
+        } else {
+          console.log("Firebase: 'account_info/current' 문서가 없습니다. 샘플 데이터를 유지합니다.");
+        }
+      }, (error) => {
+        console.error("Firebase Amount 로드 에러:", error);
+      });
+
+      // 2. 멤버 리스트 리스너 (members 컬렉션)
+      const membersRef = collection(db, 'members');
+      onSnapshot(membersRef, (snapshot) => {
+        if (!snapshot.empty) {
+          const fetchedMembers = [];
+          snapshot.forEach(doc => {
+            fetchedMembers.push({ id: doc.id, ...doc.data() });
+          });
+          // DB에 데이터가 하나라도 있으면 그걸로 화면 갱신
+          renderMembers(fetchedMembers);
+        } else {
+          console.log("Firebase: 'members' 컬렉션에 데이터가 없습니다. 샘플 데이터를 유지합니다.");
+        }
+      }, (error) => {
+        console.error("Firebase Members 로드 에러:", error);
+      });
+
+    } catch (e) {
+      console.error("Firebase 초기화 에러 (설정값을 확인하세요):", e);
+      // 에러가 나도 화면이 깨지지 않고 샘플 데이터로 유지되도록 처리됨.
+    }
+  </script>
+</body>
+</html>
