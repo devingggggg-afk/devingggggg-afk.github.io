@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Brothers Club - 계모임 대시보드</title>
+  <title>MWJ 에겐남들 모임 - 계모임 대시보드</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -99,8 +99,8 @@
           <i class="fa-solid fa-calendar-check mr-1"></i> 매월 23일 입금일
         </span>
       </div>
-      <h1 class="text-xl sm:text-2xl font-bold text-white mb-1">
-        Brothers Club 🍻
+      <h1 class="text-xl sm:text-2xl font-bold text-white mb-1 leading-snug">
+        MWJ<br>에겐남들 모임
       </h1>
       <p class="text-sm text-slate-400 mb-6">우리가 모인 금액 (카카오뱅크)</p>
       
@@ -111,7 +111,7 @@
         <span class="text-xl text-yellow-500 font-bold">원</span>
       </div>
       <div class="mt-4 flex justify-center gap-4 text-xs text-slate-300">
-        <div class="flex items-center gap-1"><i class="fa-solid fa-users text-indigo-400"></i> 총 8명</div>
+        <div class="flex items-center gap-1"><i class="fa-solid fa-users text-indigo-400"></i> 총 <span id="total-members-count" class="font-bold text-white">0</span>명</div>
         <div class="flex items-center gap-1"><i class="fa-solid fa-money-bill-wave text-green-400"></i> 월 2만원</div>
       </div>
     </header>
@@ -126,21 +126,12 @@
           <p class="text-xs text-slate-400 mt-1" id="current-month-text">2026년 7월 기준</p>
         </div>
         <div class="text-xs font-medium text-slate-300 bg-white/5 px-2 py-1 rounded-lg border border-white/10">
-          완료 <span id="paid-count" class="text-green-400 font-bold">0</span>/8
+          완료 <span id="paid-count" class="text-green-400 font-bold">0</span>/<span id="total-paid-target" class="font-bold">0</span>
         </div>
       </div>
 
-      <!-- 멤버 리스트 그리드 (기본 샘플 데이터, JS로 덮어씌워짐) -->
+      <!-- 멤버 리스트 그리드 -->
       <div id="members-grid" class="grid grid-cols-3 sm:grid-cols-4 gap-3 sm:gap-4">
-        <!-- 멤버 카드 샘플 -->
-        <div class="flex flex-col items-center gap-2">
-          <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-700 animate-pulse"></div>
-          <div class="h-3 w-10 bg-slate-700 rounded animate-pulse"></div>
-        </div>
-        <div class="flex flex-col items-center gap-2">
-          <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-700 animate-pulse"></div>
-          <div class="h-3 w-10 bg-slate-700 rounded animate-pulse"></div>
-        </div>
         <div class="flex flex-col items-center gap-2">
           <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-700 animate-pulse"></div>
           <div class="h-3 w-10 bg-slate-700 rounded animate-pulse"></div>
@@ -157,7 +148,6 @@
       </div>
 
       <div id="schedules-container" class="space-y-3">
-        <!-- JS로 실시간 렌더링됨 -->
         <div class="glass-card rounded-2xl p-4 h-24 animate-pulse bg-slate-700/20 border-white/5"></div>
         <div class="glass-card rounded-2xl p-4 h-24 animate-pulse bg-slate-700/20 border-white/5"></div>
       </div>
@@ -169,29 +159,23 @@
         <h2 class="text-lg font-bold text-white flex items-center gap-2">
           <i class="fa-solid fa-cake-candles text-pink-400"></i> 주요 경조사 및 일정
         </h2>
-        <!-- 🔥 이 버튼은 누르고 나면 자동으로 숨겨집니다! -->
-        <button onclick="window.setupEventsData()" id="event-setup-btn" class="text-[10px] bg-red-500/20 text-red-300 hover:bg-red-500/40 border border-red-500/30 px-2 py-1 rounded transition-colors cursor-pointer z-20 shadow-lg">
-          <i class="fa-solid fa-database"></i> 새 일정 DB세팅
-        </button>
       </div>
 
       <div id="events-container" class="space-y-3">
-        <!-- JS로 실시간 렌더링됨 -->
         <div class="glass-card rounded-2xl p-4 h-16 animate-pulse bg-slate-700/20 border-white/5"></div>
         <div class="glass-card rounded-2xl p-4 h-16 animate-pulse bg-slate-700/20 border-white/5"></div>
       </div>
     </section>
     
     <footer class="text-center py-4 text-xs text-slate-500 pb-10">
-      &copy; 2026 Brothers Club. All rights reserved.
+      &copy; 2026 MWJ 에겐남들 모임. All rights reserved.
     </footer>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    // 파이어베이스 설정 정보
     const firebaseConfig = {
       apiKey: "AIzaSyBnjCWfcbvrvadmQ3bjoRJTD-rXSKzp_Bo",
       authDomain: "git-io-33713.firebaseapp.com",
@@ -202,19 +186,17 @@
       measurementId: "G-58XJP9R6HB"
     };
 
-    // UI에 그릴 8명 샘플 멤버 데이터
     const mockMembers = [
-      { id: '1', name: '박성현', isPaid: false, photoUrl: '' },
-      { id: '2', name: '김관모', isPaid: false, photoUrl: '' },
-      { id: '3', name: '김현식', isPaid: false, photoUrl: '' },
-      { id: '4', name: '엄찬솔', isPaid: false, photoUrl: '' },
-      { id: '5', name: '이지원', isPaid: false, photoUrl: '' },
-      { id: '6', name: '지원복', isPaid: false, photoUrl: '' },
-      { id: '7', name: '지호진', isPaid: false, photoUrl: '' },
-      { id: '8', name: '최진우', isPaid: false, photoUrl: '' },
+      { name: "김관모", isPaid: false, photoUrl: "" },
+      { name: "김현식", isPaid: true, photoUrl: "" },
+      { name: "박성현", isPaid: false, photoUrl: "" },
+      { name: "엄찬솔", isPaid: true, photoUrl: "" },
+      { name: "이지원", isPaid: false, photoUrl: "" },
+      { name: "지원복", isPaid: true, photoUrl: "" },
+      { name: "지호진", isPaid: false, photoUrl: "" },
+      { name: "최진우", isPaid: true, photoUrl: "" }
     ];
-    
-    // UI에 그릴 계절별 일정 초기 세팅값 (미정)
+
     const mockSchedules = [
       { id: "spring", season: "봄 (3~5월)", order: 1, title: "주제 미정", date: "일정 미정", location: "장소 미정", link: "", status: "예정", icon: "fa-seedling", color: "pink" },
       { id: "summer", season: "여름 (6~8월)", order: 2, title: "주제 미정", date: "일정 미정", location: "장소 미정", link: "", status: "예정", icon: "fa-water", color: "blue" },
@@ -222,15 +204,9 @@
       { id: "winter", season: "겨울 (12~2월)", order: 4, title: "주제 미정", date: "일정 미정", location: "장소 미정", link: "", status: "예정", icon: "fa-snowflake", color: "slate" }
     ];
 
-    // UI에 그릴 경조사 일정 샘플 (링크 추가 및 날짜 업데이트)
     const mockEvents = [
-      { id: "e0", title: "지호진 승진턱 (지난일정 테스트)", date: "2026-07-20", type: "etc", location: "강남역 고깃집", link: "" },
-      { id: "e1", title: "최진우 생일파티", date: "2026-08-15", type: "birthday", location: "홍대 루프탑 (예정)", link: "https://map.naver.com" },
-      { id: "e2", title: "김관모 결혼식", date: "2026-10-24", type: "wedding", location: "강남 웨딩홀", link: "https://map.naver.com" },
-      { id: "e3", title: "박성현 집들이", date: "2026-11-05", type: "housewarming", location: "수원 영통", link: "https://map.naver.com" },
-      { id: "e4", title: "지원복 연말파티", date: "2026-12-20", type: "etc", location: "이태원 라운지", link: "" },
-      { id: "e5", title: "엄찬솔 신년회", date: "2027-01-10", type: "etc", location: "종로", link: "" },
-      { id: "e6", title: "김현식 생일", date: "2027-02-20", type: "birthday", location: "미정", link: "" }
+      { id: "e1", title: "최진우 생일파티", date: "2026-08-15", type: "birthday", location: "홍대 루프탑", link: "https://map.naver.com" },
+      { id: "e2", title: "김관모 결혼식", date: "2026-10-24", type: "wedding", location: "강남 웨딩홀", link: "https://map.naver.com" }
     ];
 
     let currentTotalAmount = 0;
@@ -243,26 +219,6 @@
       console.error("Firebase 초기화 에러:", e);
     }
 
-    window.setupEventsData = async function() {
-      if(!db) {
-        alert("DB 연결이 되지 않았습니다.");
-        return;
-      }
-      if(!confirm("Firebase에 링크가 포함된 7개의 샘플 데이터를 세팅합니다.\n(기존 데이터는 덮어씌워집니다)\n진행하시겠습니까?")) return;
-
-      try {
-        for (const e of mockEvents) {
-          await setDoc(doc(db, "events", e.id), e);
-        }
-        alert("✅ 경조사 데이터가 세팅되었습니다! 세팅 버튼을 영구적으로 숨깁니다.");
-        document.getElementById('event-setup-btn').style.display = 'none';
-      } catch(err) {
-        console.error(err);
-        alert("❌ 세팅 중 오류가 발생했습니다.");
-      }
-    };
-
-    // 초기 화면 세팅 (현재 월 표시)
     const today = new Date();
     document.getElementById('current-month-text').innerText = `${today.getFullYear()}년 ${today.getMonth() + 1}월 기준`;
 
@@ -270,12 +226,15 @@
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-    // 멤버 렌더링 함수
     function renderMembers(membersData) {
       const grid = document.getElementById('members-grid');
       grid.innerHTML = ''; 
       
       let paidCount = 0;
+      const totalMembers = membersData.length;
+
+      document.getElementById('total-members-count').innerText = totalMembers;
+      document.getElementById('total-paid-target').innerText = totalMembers;
 
       membersData.forEach(member => {
         if(member.isPaid) paidCount++;
@@ -303,7 +262,7 @@
       document.getElementById('paid-count').innerText = paidCount;
     }
 
-    // 일정 렌더링 함수 (링크가 있으면 클릭 가능하게 처리)
+    // 일정 카드 전체 클릭 기능 적용 (링크가 존재할 경우)
     function renderSchedules(schedulesData) {
       const container = document.getElementById('schedules-container');
       container.innerHTML = '';
@@ -320,16 +279,10 @@
         if(s.status === '진행중') badgeClass = 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 animate-pulse';
         if(s.status === '종료') badgeClass = 'bg-slate-800 text-slate-500 border-white/5';
 
-        // 링크가 있으면 a 태그로 감싸서 클릭 가능하게 만듦
-        const locationHtml = s.link && s.link.trim() !== '' 
-            ? `<a href="${s.link}" target="_blank" class="text-indigo-300 hover:text-indigo-200 underline decoration-indigo-400/50 underline-offset-2"><i class="fa-solid fa-location-dot mr-1"></i> ${s.location}</a>`
-            : `<i class="fa-solid fa-location-dot mr-1"></i> ${s.location}`;
+        const hasLink = s.link && s.link.trim() !== '';
+        const locationHtml = `<i class="fa-solid fa-location-dot mr-1"></i> ${s.location}`;
 
-        const card = document.createElement('div');
-        card.className = 'glass-card rounded-2xl p-4 flex gap-4 items-center relative overflow-hidden';
-        if(s.status === '진행중') card.classList.add('border-indigo-500/30', 'bg-indigo-500/10');
-
-        card.innerHTML = `
+        const cardContent = `
           <div class="w-12 h-12 rounded-xl flex justify-center items-center flex-shrink-0 border relative z-10 ${bgClass}">
             <i class="fa-solid ${s.icon} ${iconClass} text-xl"></i>
           </div>
@@ -340,9 +293,23 @@
             </div>
             <p class="text-sm text-white font-bold mt-1">${s.title}</p>
             <p class="text-xs text-slate-400 mt-1"><i class="fa-regular fa-clock mr-1"></i> ${s.date}</p>
-            <p class="text-xs text-slate-300 mt-0.5">${locationHtml}</p>
+            <p class="text-xs ${hasLink ? 'text-indigo-300 underline decoration-indigo-400/50' : 'text-slate-300'} mt-0.5">${locationHtml}</p>
           </div>
         `;
+
+        let card;
+        if (hasLink) {
+          card = document.createElement('a');
+          card.href = s.link;
+          card.target = "_blank";
+          card.className = 'glass-card rounded-2xl p-4 flex gap-4 items-center relative overflow-hidden block cursor-pointer hover:border-indigo-400/50';
+        } else {
+          card = document.createElement('div');
+          card.className = 'glass-card rounded-2xl p-4 flex gap-4 items-center relative overflow-hidden';
+        }
+        
+        if(s.status === '진행중') card.classList.add('border-indigo-500/30', 'bg-indigo-500/10');
+        card.innerHTML = cardContent;
         container.appendChild(card);
       });
     }
@@ -360,6 +327,7 @@
       return `D+${Math.abs(diffDays)}`;
     }
 
+    // 주요 일정 카드 전체 클릭 기능 적용 (링크가 존재할 경우)
     function renderEvents(eventsData) {
       const container = document.getElementById('events-container');
       container.innerHTML = '';
@@ -367,17 +335,13 @@
       const today = new Date();
       today.setHours(0,0,0,0);
 
-      // 1. 지난 일정 숨기기 (오늘 및 다가오는 일정만 필터링)
       const upcomingEvents = eventsData.filter(ev => {
         const tDate = new Date(ev.date);
         tDate.setHours(0,0,0,0);
         return tDate >= today;
       });
 
-      // 2. 날짜 오름차순 정렬 (가까운 날짜순)
       upcomingEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-      // 3. 다가오는 일정 5개까지만 자르기
       const topEvents = upcomingEvents.slice(0, 5);
 
       if (topEvents.length === 0) {
@@ -393,18 +357,13 @@
         else { iconClass = 'fa-calendar-check'; iconColor = 'text-indigo-400'; }
 
         const dDayStr = calculateDday(ev.date);
-        // D-Day가 7일 이내이거나 당일이면 붉은색 알림 강조
         const isClose = dDayStr === 'D-Day' || (dDayStr.startsWith('D-') && parseInt(dDayStr.replace('D-', '')) <= 7);
         const dDayClass = isClose ? 'bg-red-500 text-white animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'bg-slate-700/50 text-slate-300 border border-white/5';
 
-        // 링크 처리 (링크가 있으면 클릭 가능하게 렌더링)
-        const locationHtml = ev.link && ev.link.trim() !== '' 
-            ? `<a href="${ev.link}" target="_blank" class="text-indigo-300 hover:text-indigo-200 underline decoration-indigo-400/50 underline-offset-2"><i class="fa-solid fa-location-dot mr-1 w-3 text-center"></i> ${ev.location}</a>`
-            : (ev.location ? `<span><i class="fa-solid fa-location-dot mr-1 w-3 text-center"></i> ${ev.location}</span>` : '');
+        const hasLink = ev.link && ev.link.trim() !== '';
+        const locationHtml = ev.location ? `<span><i class="fa-solid fa-location-dot mr-1 w-3 text-center"></i> ${ev.location}</span>` : '';
 
-        const card = document.createElement('div');
-        card.className = 'glass-card rounded-2xl p-4 flex gap-4 items-center transition-transform hover:scale-[1.02]';
-        card.innerHTML = `
+        const cardContent = `
           <div class="w-12 h-12 rounded-xl flex justify-center items-center flex-shrink-0 bg-white/5 border border-white/10">
             <i class="fa-solid ${iconClass} ${iconColor} text-xl"></i>
           </div>
@@ -413,43 +372,48 @@
               <h3 class="font-bold text-white text-sm sm:text-base">${ev.title}</h3>
               <span class="text-[10px] px-2 py-0.5 rounded font-bold ${dDayClass}">${dDayStr}</span>
             </div>
-            <div class="flex flex-col gap-0.5 text-xs text-slate-400 mt-1">
+            <div class="flex flex-col gap-0.5 text-xs ${hasLink ? 'text-indigo-300' : 'text-slate-400'} mt-1">
               <span><i class="fa-regular fa-calendar mr-1 w-3 text-center"></i> ${ev.date}</span>
               ${locationHtml}
             </div>
           </div>
         `;
+
+        let card;
+        if (hasLink) {
+          card = document.createElement('a');
+          card.href = ev.link;
+          card.target = "_blank";
+          card.className = 'glass-card rounded-2xl p-4 flex gap-4 items-center transition-transform hover:scale-[1.02] block cursor-pointer hover:border-indigo-400/50';
+        } else {
+          card = document.createElement('div');
+          card.className = 'glass-card rounded-2xl p-4 flex gap-4 items-center transition-transform hover:scale-[1.02]';
+        }
+
+        card.innerHTML = cardContent;
         container.appendChild(card);
       });
     }
 
-    // 샘플 데이터로 일단 화면 채우기
     renderMembers(mockMembers);
     renderSchedules(mockSchedules);
     renderEvents(mockEvents);
     document.getElementById('total-amount').innerText = formatNumber(currentTotalAmount);
 
-    // 파이어베이스 리스너 (실시간 연동)
     if(db) {
-      // 1. 모임 금액 가져오기
       onSnapshot(doc(db, 'account_info', 'current'), (docSnap) => {
         if (docSnap.exists() && docSnap.data().totalAmount !== undefined) {
           document.getElementById('total-amount').innerText = formatNumber(docSnap.data().totalAmount);
         }
       }, console.error);
 
-      // 2. 멤버 리스트 가져오기
       onSnapshot(collection(db, 'members'), (snapshot) => {
-        if (!snapshot.empty) {
-          const fetchedMembers = [];
-          snapshot.forEach(doc => fetchedMembers.push({ id: doc.id, ...doc.data() }));
-          // 가나다 이름순 정렬
-          fetchedMembers.sort((a,b) => a.name.localeCompare(b.name));
-          renderMembers(fetchedMembers);
-        }
+        const fetchedMembers = [];
+        snapshot.forEach(doc => fetchedMembers.push({ id: doc.id, ...doc.data() }));
+        fetchedMembers.sort((a,b) => a.name.localeCompare(b.name));
+        renderMembers(fetchedMembers);
       }, console.error);
 
-      // 3. 계절 일정 리스트 가져오기
       onSnapshot(collection(db, 'schedules'), (snapshot) => {
         if (!snapshot.empty) {
           const fetchedSchedules = [];
@@ -458,15 +422,10 @@
         }
       }, console.error);
 
-      // 4. 경조사 이벤트 리스트 가져오기
       onSnapshot(collection(db, 'events'), (snapshot) => {
         if (!snapshot.empty) {
           const fetchedEvents = [];
           snapshot.forEach(doc => fetchedEvents.push({ id: doc.id, ...doc.data() }));
-          
-          // (수정) 유저가 다시 세팅 버튼을 누를 수 있도록 이번에만 임시로 자동 숨김 기능을 제외합니다.
-          // 버튼 클릭 후에는 버튼 이벤트 내에서 스스로 가려지게 됩니다.
-          
           renderEvents(fetchedEvents);
         }
       }, console.error);
