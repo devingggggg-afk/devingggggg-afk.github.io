@@ -154,14 +154,31 @@
         <h2 class="text-lg font-bold text-white flex items-center gap-2">
           <i class="fa-solid fa-map-location-dot text-indigo-400"></i> 연간 정기 모임 계획
         </h2>
-        <!-- 🔥 이 버튼을 클릭하면 파이어베이스에 기본 데이터가 쫙 깔립니다 -->
-     
       </div>
 
       <div id="schedules-container" class="space-y-3">
         <!-- JS로 실시간 렌더링됨 -->
         <div class="glass-card rounded-2xl p-4 h-24 animate-pulse bg-slate-700/20 border-white/5"></div>
         <div class="glass-card rounded-2xl p-4 h-24 animate-pulse bg-slate-700/20 border-white/5"></div>
+      </div>
+    </section>
+
+    <!-- 주요 경조사 및 일정 -->
+    <section class="glass-panel rounded-3xl p-5 sm:p-6 z-10">
+      <div class="flex justify-between items-center mb-5">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-cake-candles text-pink-400"></i> 주요 경조사 및 일정
+        </h2>
+        <!-- 🔥 이 버튼은 누르고 나면 자동으로 숨겨집니다! -->
+        <button onclick="window.setupEventsData()" id="event-setup-btn" class="text-[10px] bg-red-500/20 text-red-300 hover:bg-red-500/40 border border-red-500/30 px-2 py-1 rounded transition-colors cursor-pointer z-20 shadow-lg">
+          <i class="fa-solid fa-database"></i> 새 일정 DB세팅
+        </button>
+      </div>
+
+      <div id="events-container" class="space-y-3">
+        <!-- JS로 실시간 렌더링됨 -->
+        <div class="glass-card rounded-2xl p-4 h-16 animate-pulse bg-slate-700/20 border-white/5"></div>
+        <div class="glass-card rounded-2xl p-4 h-16 animate-pulse bg-slate-700/20 border-white/5"></div>
       </div>
     </section>
     
@@ -205,6 +222,13 @@
       { id: "winter", season: "겨울 (12~2월)", order: 4, title: "주제 미정", date: "일정 미정", location: "장소 미정", link: "", status: "예정", icon: "fa-snowflake", color: "slate" }
     ];
 
+    // UI에 그릴 경조사 일정 샘플
+    const mockEvents = [
+      { id: "e1", title: "최진우 생일파티", date: "2026-08-15", type: "birthday", location: "홍대 (예정)" },
+      { id: "e2", title: "김관모 결혼식", date: "2026-10-24", type: "wedding", location: "강남 웨딩홀" },
+      { id: "e3", title: "박성현 집들이", date: "2026-11-05", type: "housewarming", location: "수원 영통" }
+    ];
+
     let currentTotalAmount = 0;
     let app, db;
 
@@ -215,31 +239,22 @@
       console.error("Firebase 초기화 에러:", e);
     }
 
-    // ==========================================
-    // [마법의 버튼 기능] 파이어베이스에 데이터 밀어넣기
-    // ==========================================
-    window.setupInitialData = async function() {
+    window.setupEventsData = async function() {
       if(!db) {
         alert("DB 연결이 되지 않았습니다.");
         return;
       }
-      if(!confirm("Firebase에 8명 멤버와 4계절 미정 일정을 기본값으로 생성합니다.\n(기존 데이터가 있다면 덮어씌워집니다) 진행하시겠습니까?")) return;
+      if(!confirm("Firebase에 생일/결혼/집들이 샘플 데이터를 3개 생성합니다.\n진행하시겠습니까?")) return;
 
       try {
-        // 1. 멤버 8명 세팅
-        for (const m of mockMembers) {
-          await setDoc(doc(db, "members", m.name), { name: m.name, isPaid: false, photoUrl: "" });
+        for (const e of mockEvents) {
+          await setDoc(doc(db, "events", e.id), e);
         }
-        // 2. 모임 금액 0원으로 세팅
-        await setDoc(doc(db, "account_info", "current"), { totalAmount: 0 });
-        // 3. 4계절 미정 일정 세팅
-        for (const s of mockSchedules) {
-          await setDoc(doc(db, "schedules", s.id), s);
-        }
-        alert("✅ 파이어베이스에 초기 데이터가 완벽하게 세팅되었습니다!\n이제 파이어베이스 콘솔에서 내용과 링크를 수정해보세요.");
-      } catch(e) {
-        console.error(e);
-        alert("❌ 세팅 중 오류가 발생했습니다. 파이어베이스 규칙 설정을 확인해주세요.");
+        alert("✅ 경조사 데이터가 세팅되었습니다! 세팅 버튼을 영구적으로 숨깁니다.");
+        document.getElementById('event-setup-btn').style.display = 'none';
+      } catch(err) {
+        console.error(err);
+        alert("❌ 세팅 중 오류가 발생했습니다.");
       }
     };
 
@@ -328,9 +343,63 @@
       });
     }
 
+    function calculateDday(targetDate) {
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const tDate = new Date(targetDate);
+      tDate.setHours(0,0,0,0);
+      const diffTime = tDate - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays > 0) return `D-${diffDays}`;
+      if (diffDays === 0) return `D-Day`;
+      return `D+${Math.abs(diffDays)}`;
+    }
+
+    function renderEvents(eventsData) {
+      const container = document.getElementById('events-container');
+      container.innerHTML = '';
+      
+      // 날짜 오름차순 정렬 (가까운 날짜순)
+      eventsData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      eventsData.forEach(ev => {
+        let iconClass, iconColor;
+        if(ev.type === 'birthday') { iconClass = 'fa-cake-candles'; iconColor = 'text-pink-400'; }
+        else if(ev.type === 'wedding') { iconClass = 'fa-ring'; iconColor = 'text-yellow-400'; }
+        else if(ev.type === 'housewarming') { iconClass = 'fa-house-chimney'; iconColor = 'text-emerald-400'; }
+        else { iconClass = 'fa-calendar-check'; iconColor = 'text-indigo-400'; }
+
+        const dDayStr = calculateDday(ev.date);
+        // D-Day가 7일 이내이거나 당일이면 붉은색 알림 강조
+        const isClose = dDayStr === 'D-Day' || (dDayStr.startsWith('D-') && parseInt(dDayStr.replace('D-', '')) <= 7);
+        const dDayClass = isClose ? 'bg-red-500 text-white animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'bg-slate-700/50 text-slate-300 border border-white/5';
+
+        const card = document.createElement('div');
+        card.className = 'glass-card rounded-2xl p-4 flex gap-4 items-center transition-transform hover:scale-[1.02]';
+        card.innerHTML = `
+          <div class="w-12 h-12 rounded-xl flex justify-center items-center flex-shrink-0 bg-white/5 border border-white/10">
+            <i class="fa-solid ${iconClass} ${iconColor} text-xl"></i>
+          </div>
+          <div class="flex-grow">
+            <div class="flex justify-between items-start mb-1">
+              <h3 class="font-bold text-white text-sm sm:text-base">${ev.title}</h3>
+              <span class="text-[10px] px-2 py-0.5 rounded font-bold ${dDayClass}">${dDayStr}</span>
+            </div>
+            <div class="flex flex-col gap-0.5 text-xs text-slate-400 mt-1">
+              <span><i class="fa-regular fa-calendar mr-1 w-3 text-center"></i> ${ev.date}</span>
+              ${ev.location ? `<span><i class="fa-solid fa-location-dot mr-1 w-3 text-center"></i> ${ev.location}</span>` : ''}
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
     // 샘플 데이터로 일단 화면 채우기
     renderMembers(mockMembers);
     renderSchedules(mockSchedules);
+    renderEvents(mockEvents);
     document.getElementById('total-amount').innerText = formatNumber(currentTotalAmount);
 
     // 파이어베이스 리스너 (실시간 연동)
@@ -359,6 +428,20 @@
           const fetchedSchedules = [];
           snapshot.forEach(doc => fetchedSchedules.push({ id: doc.id, ...doc.data() }));
           renderSchedules(fetchedSchedules);
+        }
+      }, console.error);
+
+      // 4. 경조사 이벤트 리스트 가져오기
+      onSnapshot(collection(db, 'events'), (snapshot) => {
+        if (!snapshot.empty) {
+          const fetchedEvents = [];
+          snapshot.forEach(doc => fetchedEvents.push({ id: doc.id, ...doc.data() }));
+          
+          // DB에 이벤트 데이터가 성공적으로 있으면 세팅 버튼 자동 숨김!
+          const setupBtn = document.getElementById('event-setup-btn');
+          if(setupBtn) setupBtn.style.display = 'none';
+          
+          renderEvents(fetchedEvents);
         }
       }, console.error);
     }
