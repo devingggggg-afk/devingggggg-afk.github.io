@@ -3,8 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>김현식과 아이들</title>
+  <title>MWJ 에겐남들 모임</title>
   
+  <!-- Open Graph (OG) 태그 추가 -->
+  <meta property="og:title" content="김현식과 아이들">
+  <meta property="og:image" content="https://an2-img.amz.wtchn.net/image/v2/M7dAZLFUUfsC7DKvxdAzcg.webp?jwt=ZXlKaGJHY2lPaUpJVXpJMU5pSjkuZXlKdmNIUnpJanBiSW1SZk1USTRNSGczTWpCeE9EQWlYU3dpY0NJNklpOTJNaTl6ZEc5eVpTOXBiV0ZuWlM4eE5qRTFOems0TkRFNU1qWXpOalU1TXpZMkluMC5GSkdURkZLQ1ZVeTl3SkY4YmQtYVkzYzVPNk0tNTNwaGRyVEtnLTVjLXJB">
+  <meta property="og:type" content="website">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -130,7 +135,7 @@
         </div>
       </div>
 
-      <!-- 멤버 리스트 그리드 -->
+      <!-- 멤버 리스트 그리드 (동적 렌더링) -->
       <div id="members-grid" class="grid grid-cols-3 sm:grid-cols-4 gap-3 sm:gap-4">
         <div class="flex flex-col items-center gap-2">
           <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-700 animate-pulse"></div>
@@ -186,30 +191,6 @@
       measurementId: "G-58XJP9R6HB"
     };
 
-    const mockMembers = [
-      { name: "김관모", isPaid: false, photoUrl: "" },
-      { name: "김현식", isPaid: true, photoUrl: "" },
-      { name: "박성현", isPaid: false, photoUrl: "" },
-      { name: "엄찬솔", isPaid: true, photoUrl: "" },
-      { name: "이지원", isPaid: false, photoUrl: "" },
-      { name: "지원복", isPaid: true, photoUrl: "" },
-      { name: "지호진", isPaid: false, photoUrl: "" },
-      { name: "최진우", isPaid: true, photoUrl: "" }
-    ];
-
-    const mockSchedules = [
-      { id: "spring", season: "봄 (3~5월)", order: 1, title: "주제 미정", date: "일정 미정", location: "장소 미정", link: "", status: "예정", icon: "fa-seedling", color: "pink" },
-      { id: "summer", season: "여름 (6~8월)", order: 2, title: "주제 미정", date: "일정 미정", location: "장소 미정", link: "", status: "예정", icon: "fa-water", color: "blue" },
-      { id: "fall", season: "가을 (9~11월)", order: 3, title: "주제 미정", date: "일정 미정", location: "장소 미정", link: "", status: "예정", icon: "fa-leaf", color: "orange" },
-      { id: "winter", season: "겨울 (12~2월)", order: 4, title: "주제 미정", date: "일정 미정", location: "장소 미정", link: "", status: "예정", icon: "fa-snowflake", color: "slate" }
-    ];
-
-    const mockEvents = [
-      { id: "e1", title: "최진우 생일파티", date: "2026-08-15", type: "birthday", location: "홍대 루프탑", link: "https://map.naver.com" },
-      { id: "e2", title: "김관모 결혼식", date: "2026-10-24", type: "wedding", location: "강남 웨딩홀", link: "https://map.naver.com" }
-    ];
-
-    let currentTotalAmount = 0;
     let app, db;
 
     try {
@@ -226,6 +207,7 @@
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    // 멤버 데이터 렌더링 (동적 처리)
     function renderMembers(membersData) {
       const grid = document.getElementById('members-grid');
       grid.innerHTML = ''; 
@@ -262,7 +244,7 @@
       document.getElementById('paid-count').innerText = paidCount;
     }
 
-    // 일정 카드 전체 클릭 기능 적용 (링크가 존재할 경우)
+    // 정기 모임 계획 렌더링 (카드 전체 클릭 링크 지원)
     function renderSchedules(schedulesData) {
       const container = document.getElementById('schedules-container');
       container.innerHTML = '';
@@ -327,7 +309,7 @@
       return `D+${Math.abs(diffDays)}`;
     }
 
-    // 주요 일정 카드 전체 클릭 기능 적용 (링크가 존재할 경우)
+    // 주요 일정 렌더링 (지난 일정 숨김, 최대 5개, 카드 전체 클릭 링크 지원)
     function renderEvents(eventsData) {
       const container = document.getElementById('events-container');
       container.innerHTML = '';
@@ -335,12 +317,14 @@
       const today = new Date();
       today.setHours(0,0,0,0);
 
+      // 오늘 날짜 이후의 다가오는 일정만 필터링
       const upcomingEvents = eventsData.filter(ev => {
         const tDate = new Date(ev.date);
         tDate.setHours(0,0,0,0);
         return tDate >= today;
       });
 
+      // 날짜 임박 순서대로 정렬 후 최대 5개만 추출
       upcomingEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
       const topEvents = upcomingEvents.slice(0, 5);
 
@@ -395,11 +379,7 @@
       });
     }
 
-    renderMembers(mockMembers);
-    renderSchedules(mockSchedules);
-    renderEvents(mockEvents);
-    document.getElementById('total-amount').innerText = formatNumber(currentTotalAmount);
-
+    // 파이어베이스 실시간 리스너 연결
     if(db) {
       onSnapshot(doc(db, 'account_info', 'current'), (docSnap) => {
         if (docSnap.exists() && docSnap.data().totalAmount !== undefined) {
