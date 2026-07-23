@@ -170,7 +170,9 @@
           <i class="fa-solid fa-cake-candles text-pink-400"></i> 주요 경조사 및 일정
         </h2>
         <!-- 🔥 이 버튼은 누르고 나면 자동으로 숨겨집니다! -->
-    
+        <button onclick="window.setupEventsData()" id="event-setup-btn" class="text-[10px] bg-red-500/20 text-red-300 hover:bg-red-500/40 border border-red-500/30 px-2 py-1 rounded transition-colors cursor-pointer z-20 shadow-lg">
+          <i class="fa-solid fa-database"></i> 새 일정 DB세팅
+        </button>
       </div>
 
       <div id="events-container" class="space-y-3">
@@ -220,11 +222,15 @@
       { id: "winter", season: "겨울 (12~2월)", order: 4, title: "주제 미정", date: "일정 미정", location: "장소 미정", link: "", status: "예정", icon: "fa-snowflake", color: "slate" }
     ];
 
-    // UI에 그릴 경조사 일정 샘플
+    // UI에 그릴 경조사 일정 샘플 (링크 추가 및 날짜 업데이트)
     const mockEvents = [
-      { id: "e1", title: "최진우 생일파티", date: "2026-08-15", type: "birthday", location: "홍대 (예정)" },
-      { id: "e2", title: "김관모 결혼식", date: "2026-10-24", type: "wedding", location: "강남 웨딩홀" },
-      { id: "e3", title: "박성현 집들이", date: "2026-11-05", type: "housewarming", location: "수원 영통" }
+      { id: "e0", title: "지호진 승진턱 (지난일정 테스트)", date: "2026-07-20", type: "etc", location: "강남역 고깃집", link: "" },
+      { id: "e1", title: "최진우 생일파티", date: "2026-08-15", type: "birthday", location: "홍대 루프탑 (예정)", link: "https://map.naver.com" },
+      { id: "e2", title: "김관모 결혼식", date: "2026-10-24", type: "wedding", location: "강남 웨딩홀", link: "https://map.naver.com" },
+      { id: "e3", title: "박성현 집들이", date: "2026-11-05", type: "housewarming", location: "수원 영통", link: "https://map.naver.com" },
+      { id: "e4", title: "지원복 연말파티", date: "2026-12-20", type: "etc", location: "이태원 라운지", link: "" },
+      { id: "e5", title: "엄찬솔 신년회", date: "2027-01-10", type: "etc", location: "종로", link: "" },
+      { id: "e6", title: "김현식 생일", date: "2027-02-20", type: "birthday", location: "미정", link: "" }
     ];
 
     let currentTotalAmount = 0;
@@ -242,7 +248,7 @@
         alert("DB 연결이 되지 않았습니다.");
         return;
       }
-      if(!confirm("Firebase에 생일/결혼/집들이 샘플 데이터를 3개 생성합니다.\n진행하시겠습니까?")) return;
+      if(!confirm("Firebase에 링크가 포함된 7개의 샘플 데이터를 세팅합니다.\n(기존 데이터는 덮어씌워집니다)\n진행하시겠습니까?")) return;
 
       try {
         for (const e of mockEvents) {
@@ -358,10 +364,28 @@
       const container = document.getElementById('events-container');
       container.innerHTML = '';
       
-      // 날짜 오름차순 정렬 (가까운 날짜순)
-      eventsData.sort((a, b) => new Date(a.date) - new Date(b.date));
+      const today = new Date();
+      today.setHours(0,0,0,0);
 
-      eventsData.forEach(ev => {
+      // 1. 지난 일정 숨기기 (오늘 및 다가오는 일정만 필터링)
+      const upcomingEvents = eventsData.filter(ev => {
+        const tDate = new Date(ev.date);
+        tDate.setHours(0,0,0,0);
+        return tDate >= today;
+      });
+
+      // 2. 날짜 오름차순 정렬 (가까운 날짜순)
+      upcomingEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      // 3. 다가오는 일정 5개까지만 자르기
+      const topEvents = upcomingEvents.slice(0, 5);
+
+      if (topEvents.length === 0) {
+        container.innerHTML = '<div class="text-center text-slate-500 text-sm py-4">다가오는 일정이 없습니다.</div>';
+        return;
+      }
+
+      topEvents.forEach(ev => {
         let iconClass, iconColor;
         if(ev.type === 'birthday') { iconClass = 'fa-cake-candles'; iconColor = 'text-pink-400'; }
         else if(ev.type === 'wedding') { iconClass = 'fa-ring'; iconColor = 'text-yellow-400'; }
@@ -372,6 +396,11 @@
         // D-Day가 7일 이내이거나 당일이면 붉은색 알림 강조
         const isClose = dDayStr === 'D-Day' || (dDayStr.startsWith('D-') && parseInt(dDayStr.replace('D-', '')) <= 7);
         const dDayClass = isClose ? 'bg-red-500 text-white animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'bg-slate-700/50 text-slate-300 border border-white/5';
+
+        // 링크 처리 (링크가 있으면 클릭 가능하게 렌더링)
+        const locationHtml = ev.link && ev.link.trim() !== '' 
+            ? `<a href="${ev.link}" target="_blank" class="text-indigo-300 hover:text-indigo-200 underline decoration-indigo-400/50 underline-offset-2"><i class="fa-solid fa-location-dot mr-1 w-3 text-center"></i> ${ev.location}</a>`
+            : (ev.location ? `<span><i class="fa-solid fa-location-dot mr-1 w-3 text-center"></i> ${ev.location}</span>` : '');
 
         const card = document.createElement('div');
         card.className = 'glass-card rounded-2xl p-4 flex gap-4 items-center transition-transform hover:scale-[1.02]';
@@ -386,7 +415,7 @@
             </div>
             <div class="flex flex-col gap-0.5 text-xs text-slate-400 mt-1">
               <span><i class="fa-regular fa-calendar mr-1 w-3 text-center"></i> ${ev.date}</span>
-              ${ev.location ? `<span><i class="fa-solid fa-location-dot mr-1 w-3 text-center"></i> ${ev.location}</span>` : ''}
+              ${locationHtml}
             </div>
           </div>
         `;
@@ -435,9 +464,8 @@
           const fetchedEvents = [];
           snapshot.forEach(doc => fetchedEvents.push({ id: doc.id, ...doc.data() }));
           
-          // DB에 이벤트 데이터가 성공적으로 있으면 세팅 버튼 자동 숨김!
-          const setupBtn = document.getElementById('event-setup-btn');
-          if(setupBtn) setupBtn.style.display = 'none';
+          // (수정) 유저가 다시 세팅 버튼을 누를 수 있도록 이번에만 임시로 자동 숨김 기능을 제외합니다.
+          // 버튼 클릭 후에는 버튼 이벤트 내에서 스스로 가려지게 됩니다.
           
           renderEvents(fetchedEvents);
         }
