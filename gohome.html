@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>찬솔이의 집으로!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 flex items-center justify-center h-screen">
+
+    <div class="text-center p-8 bg-white rounded-2xl shadow-xl">
+        <h1 class="text-3xl font-bold text-blue-600 mb-4">찬솔님, 곧 퇴근입니다!</h1>
+        <p class="text-gray-600">지금 바로 팝업이 시작됩니다...</p>
+    </div>
+
+    <script>
+        window.onload = () => {
+            // 브라우저가 로드되자마자 10번의 팝업을 순차적으로 호출합니다.
+            // 브라우저 정책상 차단될 수 있으므로 브라우저 상단 '팝업 허용'을 눌러주세요.
+            for (let i = 1; i <= 10; i++) {
+                setTimeout(() => {
+                    alert(`${i}번째 확인: 찬솔이 집에언제가나~`);
+                }, i * 800); // 0.8초 간격으로 설정하여 브라우저 부담을 최소화합니다.
+            }
+        };
+    </script>
+</body>
+</html>
