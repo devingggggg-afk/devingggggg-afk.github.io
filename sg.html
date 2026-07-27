@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성구환경 - 폐기물 수집·운반 전문기업</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sgGreen: {
+                            DEFAULT: '#1b8b4a', // 명함의 주요 녹색
+                            light: '#42a86b',
+                            dark: '#116132',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Pretendard', 'Malgun Gothic', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body { font-family: 'Pretendard', sans-serif; scroll-behavior: smooth; }
+        .hero-bg {
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased bg-gray-50 flex flex-col min-h-screen">
+
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-20">
+                <!-- 로고 영역 -->
+                <div class="flex items-center space-x-2">
+                    <div class="flex flex-col">
+                        <span class="text-3xl font-extrabold text-sgGreen italic tracking-tighter leading-none">SUNGGOO</span>
+                        <span class="text-sm font-semibold text-gray-600 mt-1">폐기물 수집·운반 전문기업</span>
+                    </div>
+                </div>
+                
+                <!-- 데스크톱 메뉴 -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#about" class="text-gray-600 hover:text-sgGreen font-medium transition-colors">회사소개</a>
+                    <a href="#services" class="text-gray-600 hover:text-sgGreen font-medium transition-colors">주요업무</a>
+                    <a href="#contact" class="text-gray-600 hover:text-sgGreen font-medium transition-colors">오시는길</a>
+                    <a href="tel:010-2813-7323" class="bg-sgGreen text-white px-5 py-2.5 rounded-full font-bold hover:bg-sgGreen-dark transition-colors shadow-md flex items-center">
+                        <i class="fas fa-phone-alt mr-2"></i> 상담문의
+                    </a>
+                </div>
+
+                <!-- 모바일 메뉴 버튼 (기능은 생략됨, UI만 표시) -->
+                <div class="md:hidden flex items-center">
+                    <button class="text-gray-600 hover:text-sgGreen focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow">
+        <section class="hero-bg py-24 md:py-32">
+            <div class="max-w-6xl mx-auto px-4 text-center">
+                <span class="inline-block py-1 px-3 rounded-full bg-sgGreen bg-opacity-10 text-sgGreen font-semibold text-sm mb-4 border border-sgGreen border-opacity-20">
+                    친환경 폐기물 처리 솔루션
+                </span>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 leading-tight">
+                    자연과 환경을 생각하는<br>
+                    <span class="text-sgGreen">성구환경</span>입니다.
+                </h1>
+                <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
+                    체계적이고 안전한 폐기물 수집 및 운반으로 고객님의 사업장 환경을 쾌적하게 유지해 드립니다. 세금계산서 및 폐기물확인서 발급 가능.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="tel:010-2813-7323" class="bg-sgGreen text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-sgGreen-dark transition-colors shadow-lg flex justify-center items-center">
+                        <i class="fas fa-mobile-alt mr-2"></i> 010-2813-7323
+                    </a>
+                    <a href="#contact" class="bg-white text-sgGreen border-2 border-sgGreen px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-50 transition-colors flex justify-center items-center">
+                        <i class="far fa-envelope mr-2"></i> 이메일 문의
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="py-20 bg-white">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">우리의 약속</h2>
+                    <div class="w-16 h-1 bg-sgGreen mx-auto rounded"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Feature 1 -->
+                    <div class="p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-xl transition-shadow text-center group">
+                        <div class="w-16 h-16 mx-auto bg-white rounded-full flex items-center justify-center shadow-sm text-sgGreen text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-800">신속하고 안전한 운반</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            다년간의 노하우를 바탕으로 폐기물을 안전하고 신속하게 수집하여 지정된 장소까지 운반합니다.
+                        </p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-xl transition-shadow text-center group">
+                        <div class="w-16 h-16 mx-auto bg-white rounded-full flex items-center justify-center shadow-sm text-sgGreen text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-800">투명한 서류 처리</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            투명한 거래를 위해 <strong class="text-sgGreen">세금계산서</strong> 및 <strong class="text-sgGreen">폐기물확인서</strong>를 정확하게 발행해 드립니다.
+                        </p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-xl transition-shadow text-center group">
+                        <div class="w-16 h-16 mx-auto bg-white rounded-full flex items-center justify-center shadow-sm text-sgGreen text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-800">친환경 처리 시스템</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            환경 법규를 철저히 준수하며, 올바로(Allbaro) 시스템을 통한 적법한 폐기물 처리를 지향합니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 bg-gray-50">
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row border border-gray-100">
+                    
+                    <!-- 왼쪽: 명함 정보 스타일 -->
+                    <div class="p-10 md:w-1/2 bg-white flex flex-col justify-center">
+                        <div class="mb-8">
+                            <h2 class="text-3xl font-extrabold text-sgGreen italic tracking-tighter">SUNGGOO</h2>
+                            <p class="text-sm font-bold text-gray-600 mt-1">폐기물 수집·운반 전문기업</p>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="border-t-2 border-sgGreen pt-4">
+                                <p class="text-lg font-bold text-gray-800 mb-1">세금계산서 · 폐기물확인서</p>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <div class="flex items-center text-gray-700">
+                                    <span class="w-20 font-bold text-sgGreen">MOBILE.</span>
+                                    <a href="tel:010-2813-7323" class="text-xl font-bold hover:text-sgGreen transition-colors">010-2813-7323</a>
+                                </div>
+                                <div class="flex items-center text-gray-700">
+                                    <span class="w-20 font-bold text-sgGreen">E-mail.</span>
+                                    <a href="mailto:pjamesh117@naver.com" class="text-lg hover:text-sgGreen transition-colors">pjamesh117@naver.com</a>
+                                </div>
+                            </div>
+                            
+                            <div class="pt-6 mt-6 border-t border-gray-100 flex justify-between items-end">
+                                <div>
+                                    <p class="text-xl font-bold text-sgGreen mb-1">SG개발</p>
+                                    <p class="text-2xl font-bold text-gray-800 tracking-widest">박 성 현</p>
+                                </div>
+                                <div class="text-right">
+                                    <!-- 올바로 로고 텍스트 대체 -->
+                                    <span class="text-blue-500 font-bold italic">All</span>
+                                    <span class="text-blue-400 font-bold">baro</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 오른쪽: 빠른 문의 영역 -->
+                    <div class="p-10 md:w-1/2 bg-sgGreen text-white">
+                        <h3 class="text-2xl font-bold mb-6">빠른 상담 문의</h3>
+                        <p class="mb-8 text-sgGreen-light opacity-90">폐기물 처리 관련 궁금한 사항이 있으신가요? 전화 주시면 친절하게 상담해 드립니다.</p>
+                        
+                        <div class="space-y-4">
+                            <a href="tel:010-2813-7323" class="w-full block text-center bg-white text-sgGreen py-4 rounded-xl font-bold text-xl hover:bg-gray-100 transition-colors shadow-md">
+                                <i class="fas fa-phone mr-2"></i> 전화 걸기
+                            </a>
+                            <button onclick="copyEmail()" class="w-full block text-center bg-sgGreen-dark text-white py-4 rounded-xl font-bold text-lg hover:bg-opacity-80 transition-colors border border-sgGreen-light">
+                                <i class="far fa-copy mr-2"></i> 이메일 주소 복사
+                            </button>
+                            <p id="copy-msg" class="text-center text-sm text-yellow-300 opacity-0 transition-opacity">이메일 주소가 복사되었습니다.</p>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 py-10">
+        <div class="max-w-6xl mx-auto px-4 text-center md:text-left flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <span class="text-2xl font-extrabold text-white italic tracking-tighter">SUNGGOO</span>
+                <p class="text-sm mt-2">폐기물 수집·운반 전문기업 성구환경</p>
+            </div>
+            <div class="text-sm">
+                <p>대표: 박성현 | SG개발</p>
+                <p>Mobile: 010-2813-7323 | E-mail: pjamesh117@naver.com</p>
+                <p class="mt-4 text-gray-600">&copy; 2026 SUNGGOO Environment. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function copyEmail() {
+            const email = 'pjamesh117@naver.com';
+            
+            // 임시 textarea 생성하여 복사
+            const tempInput = document.createElement('textarea');
+            tempInput.value = email;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand('copy');
+                const msg = document.getElementById('copy-msg');
+                msg.classList.remove('opacity-0');
+                msg.classList.add('opacity-100');
+                
+                setTimeout(() => {
+                    msg.classList.remove('opacity-100');
+                    msg.classList.add('opacity-0');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+            }
+            
+            document.body.removeChild(tempInput);
+        }
+    </script>
+</body>
+</html>
