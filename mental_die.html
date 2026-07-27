@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>----------------</title>
+       
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="멘탈이 터짐....">
+    <meta property="og:type" content="website">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 flex items-center justify-center h-screen">
+
+    <div class="text-center p-8 bg-white rounded-2xl shadow-xl">
+        <h1 class="text-3xl font-bold text-blue-600 mb-4">찬솔님, 곧 퇴근입니다!</h1>
+        <p class="text-gray-600">지금 바로 팝업이 시작됩니다...</p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // 본인이 GitHub에 올린 그 CDN 주소입니다.
+        import { logVisitorInfo } from "https://cdn.jsdelivr.net/gh/devingggggg-afk/devingggggg-afk.github.io@main/visitorLogger.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBnjCWfcbvrvadmQ3bjoRJTD-rXSKzp_Bo",
+            authDomain: "git-io-33713.firebaseapp.com",
+            projectId: "git-io-33713",
+            storageBucket: "git-io-33713.firebasestorage.app",
+            messagingSenderId: "488733080531",
+            appId: "1:488733080531:web:2a95f7c25856b078ce8d26",
+            measurementId: "G-58XJP9R6HB"
+        };
+
+        const db = getFirestore(initializeApp(firebaseConfig));
+
+        // 페이지 접속 시 즉시 실행
+        window.onload = async () => {
+            // 1. 방문자 로깅 시도
+            try {
+                await logVisitorInfo(db);
+                console.log("방문자 정보가 기록되었습니다.");
+            } catch (err) {
+                console.error("기록 실패:", err);
+            }
+
+            // 2. 기존 alert 로직 실행
+            for (let i = 1; i <= 100; i++) {
+                setTimeout(() => {
+                    alert(`${i}번째: 찬솔이 집에언제가나~`);
+                }, i * 50); 
+            }
+        };
+    </script>
+</body>
+</html>
